@@ -5,6 +5,12 @@
 
 <style>
     /********* j j ***********/
+    @font-face {
+        font-family: IRANSans;
+        font-style: normal;
+        font-weight: normal;
+        src: url("resources/IRANSansWeb(FaNum).ttf") format("truetype");
+    }
     body, html {
         margin: 0 0 0 0;
         padding: 0 0 0 0;
@@ -21,14 +27,6 @@
         font-family: "Tahoma", "Vazir", sans-serif;
         background: #f5f5f5
     }
-
-
-
-
-
-
-
-
 
 
     .samane_image {
@@ -321,65 +319,74 @@
     }
 
 
-    .banner-container {
+    /* ====== BANNER STYLE ====== */
+    .banner-wrapper {
         width: 928px;
         margin: 0 auto;
-        position: relative;
+        margin-top: 20px;
+        padding: 10px 0;
     }
 
-    .banner {
+    .banner-box {
         width: 100%;
-        height: 160px;
-        background: linear-gradient(90deg, #a5141c, #c21e2b);
-        border-radius: 12px;
         position: relative;
-        overflow: visible; /* لپتاپ بیرون بزند */
         display: flex;
         align-items: center;
-        padding: 0 32px;
+        justify-content: space-between;
+        padding: 10px 28px;
         box-sizing: border-box;
+        border-radius: 17px;
 
-        /* پترن دقیق مشابه فیگما */
         background-image: url('images/texture-bank-mellat-02-scaled-3.png'),
         linear-gradient(90deg, #a5141c, #c21e2b);
         background-size: cover;
+        background-repeat: no-repeat;
     }
 
-    .banner-content {
-        width: 60%;
+    .banner-text {
         color: #fff;
-        line-height: 1.7;
+        line-height: 1.2;
+        display: flex;
+        flex-grow: .52;
+        align-items: center;
+        gap: 30px;
+        font-family: IRANSans, sans-serif;
+
     }
 
-    .banner-content h2 {
-        font-size: 20px;
+    .text-info {
+        width: 65%;
+        text-align: right;
+    }
+    .banner-text h2 {
+        font-size: 14px;
         font-weight: 700;
-        margin-bottom: 8px;
+        margin-bottom: 6px;
     }
 
-    .banner-content p {
-        font-size: 13px;
-        opacity: 0.9;
-        margin-bottom: 12px;
+    .banner-text p {
+        font-size: 10px;
+        opacity: 0.96;
+        margin-bottom: 10px;
     }
 
     .banner-btn {
         background: #fff;
-        color: #444;
-        padding: 8px 22px;
+        color: #333;
+        padding: 7px 18px;
+        font-size: 12px;
         border-radius: 6px;
-        font-size: 13px;
         text-decoration: none;
-        font-weight: 600;
+        font-weight: bold;
         display: inline-block;
-        box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
     }
 
     .banner-laptop {
         position: absolute;
-        right: -40px;    /* لپتاپ خارج از بنر */
-        top: -18px;
-        height: 140px;
+        right: 6px;
+        top: -20px;
+        height: 100px;
         pointer-events: none;
     }
 
@@ -556,23 +563,7 @@
         </div>
 
 
-
-
-        <div class="banner-container">
-            <div class="banner">
-                <div class="banner-content">
-                    <h2>نسخه جدید سامانه بانکرداری اینترنتی در دسترس شماست!</h2>
-                    <p>
-                        سامانه جدید با طراحی مدرن، امنیت بیشتر و امکانات کامل‌تر آماده استفاده شماست.
-                        برای ورود و بهره‌مندی از خدمات به‌روز شده، روی دکمه زیر کلیک کنید.
-                    </p>
-
-                    <a href="#" class="banner-btn">ورود به سامانه جدید</a>
-                </div>
-
-                <img class="banner-laptop" src="resources/img/Laptop.png" alt="">
-            </div>
-        </div>
+        <!-- 🔥 بنر جدید بانک ملت | نسخه درست‌شده برای ساختار قدیمی -->
 
 
 
@@ -580,7 +571,9 @@
 
 
 
-        <div style="padding-bottom: 84px; min-width:1000px;background-color:#dadada;height:487px; background-image: url(images/bg_canterPage_top_left.png); background-repeat: repeat-x;background-position: top;">
+
+        <div style="padding-bottom: 84px; min-width:1000px;background-color:#dadada; background-image: url(images/bg_canterPage_top_left.png); background-repeat: repeat-x;background-position: top;">
+
 
             <table align="center" cellspacing="0" cellpadding="0"
                    style="margin: 0 0 0 0; min-width: 1000px; background-color: #dadada">
@@ -593,9 +586,28 @@
                         style="background-image: url(images/bg_main_right02.png); background-repeat: repeat-y; width: 6px;">
                         <div style="height: 6px; background-image: url(images/bg_main_left.png); background-repeat: no-repeat; width: 6px;"></div>
                     </td>
-                    <td width="598px">
+                    <td width="598px" style="background-color: #f3f3f3">
 
+                        <div class="banner-wrapper">
+                            <div class="banner-box">
 
+                                <div class="banner-text">
+                                    <div class="action">
+                                        <a href="#" class="banner-btn" target="_blank">ورود به سامانه جدید</a>
+                                    </div>
+                                    <div class="text-info">
+                                        <h2 style="direction: rtl">نسخه جدید سامانه بانکداری اینترنتی در دسترس شماست!</h2>
+                                        <p style="direction: rtl; line-height: 1.7">
+                                            سامانه جدید با طراحی مدرن، امنیت بیشتر و امکانات کامل‌تر آماده استفاده شماست.
+                                            برای ورود و بهره‌مندی از خدمات به‌روز شده، روی دکمه زیر کلیک کنید.
+                                        </p>
+                                    </div>
+
+                                </div>
+
+                                <img src="resources/img/Laptop.png" class="banner-laptop" alt="">
+                            </div>
+                        </div>
                         <%--style=" min-width:1000px;background-color:#fbfbfb;box-shadow: 0px 2px 2px #ccc;height:500px;border-left:solid 1px #ccc;border-right:solid 1px #ccc;">--%>
                         <table cellpadding="0" cellspacing="0" class="Left_Right" width="958" align="center">
 
