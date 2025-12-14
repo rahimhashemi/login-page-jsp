@@ -122,3 +122,6 @@ coverage/
 .cache/
 .tmp/
 *.tmp
+/.idea/
+/.settings/
+/.settings/
