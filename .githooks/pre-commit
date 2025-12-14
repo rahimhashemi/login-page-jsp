@@ -1,0 +1,134 @@
+#!/bin/sh
+# =========================================
+# BFF Backend Enhanced Pre-Commit Hook
+# =========================================
+
+set -e
+
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+NC='\033[0m'
+
+echo "🔍 Running BFF backend pre-commit checks..."
+
+# -----------------------------
+# 1️⃣ Branch protection
+# -----------------------------
+BRANCH=$(git symbolic-ref --short HEAD)
+PROTECTED_BRANCHES=("main" "master" "release")
+for b in "${PROTECTED_BRANCHES[@]}"; do
+  if [ "$BRANCH" = "$b" ]; then
+    echo "${RED}❌ Direct commits to $BRANCH are forbidden${NC}"
+    exit 1
+  fi
+done
+
+# -----------------------------
+# 2️⃣ Debug / TODO detection
+# -----------------------------
+DEBUG_PATTERN="System\.out\.println|printStackTrace|TODO|log\.debug"
+if git diff --cached | grep -E "$DEBUG_PATTERN" > /dev/null; then
+  echo "${RED}❌ Debug/TODO code detected${NC}"
+  exit 1
+fi
+
+# -----------------------------
+# 3️⃣ Secrets detection
+# -----------------------------
+SECRET_PATTERN="(AWS_SECRET|PRIVATE_KEY|PASSWORD=|api_key|secret)"
+if git diff --cached | grep -iE "$SECRET_PATTERN" > /dev/null; then
+  echo "${RED}❌ Possible secret detected${NC}"
+  exit 1
+fi
+
+# -----------------------------
+# 4️⃣ File size check
+# -----------------------------
+MAX_FILE_SIZE=1048576 # 1MB
+for file in $(git diff --cached --name-only); do
+  if [ -f "$file" ] && [ $(stat -c%s "$file") -gt $MAX_FILE_SIZE ]; then
+    echo "${RED}❌ $file exceeds max file size of 1MB${NC}"
+    exit 1
+  fi
+done
+
+# -----------------------------
+# 5️⃣ Backend formatting check (Spotless)
+# -----------------------------
+if [ -f "./mvnw" ]; then
+  echo "🎨 Checking backend formatting..."
+  ./mvnw -q spotless:check || {
+    echo "${RED}❌ Spotless formatting failed${NC}"
+    exit 1
+  }
+fi
+
+# -----------------------------
+# 6️⃣ Deprecated usage warning
+# -----------------------------
+if git diff --cached | grep -E '@Deprecated' > /dev/null; then
+  echo "${YELLOW}⚠ Warning: Deprecated API usage detected${NC}"
+fi
+
+# -----------------------------
+# 7️⃣ Property key naming convention
+# -----------------------------
+# Only lowercase letters, numbers, dots
+PROP_PATTERN='^[a-z0-9]+(\.[a-z0-9]+)*='
+for file in $(git diff --cached --name-only | grep -E 'application\.properties|application\.yml'); do
+  if [ -f "$file" ]; then
+    if grep -E -v "$PROP_PATTERN" "$file" > /dev/null; then
+      echo "${RED}❌ Property key naming convention violated in $file"
+      echo "Expected lowercase letters, numbers, separated by dots (e.g., server.port)"
+      exit 1
+    fi
+  fi
+done
+
+# -----------------------------
+# 8️⃣ File naming convention
+# -----------------------------
+INVALID_FILES=()
+for file in $(git diff --cached --name-only); do
+  [ -f "$file" ] || continue
+  filename=$(basename "$file")
+  extension="${filename##*.}"
+
+  case "$extension" in
+    java)
+      if ! [[ "$filename" =~ ^[A-Z][A-Za-z0-9]*\.java$ ]]; then
+        INVALID_FILES+=("$file (Java files must be PascalCase)")
+      fi
+      ;;
+    properties|yml)
+      if ! [[ "$filename" =~ ^[a-z0-9.-]+\.($extension)$ ]]; then
+        INVALID_FILES+=("$file (Properties/YML files must be lowercase with dots/dashes)")
+      fi
+      ;;
+    *)
+      if [[ "$extension" =~ ^(class|log|tmp)$ ]]; then
+        INVALID_FILES+=("$file (Forbidden extension)")
+      fi
+      ;;
+  esac
+done
+
+if [ ${#INVALID_FILES[@]} -gt 0 ]; then
+  echo "${RED}❌ File naming convention violated:${NC}"
+  for f in "${INVALID_FILES[@]}"; do
+    echo "   - $f"
+  done
+  exit 1
+fi
+
+# -----------------------------
+# 9️⃣ Large commit warning
+# -----------------------------
+MAX_FILES=30
+FILE_COUNT=$(git diff --cached --name-only | wc -l)
+if [ "$FILE_COUNT" -gt "$MAX_FILES" ]; then
+  echo "${YELLOW}⚠ You are committing $FILE_COUNT files. Consider splitting the commit.${NC}"
+fi
+
+echo "${GREEN}✅ Pre-commit checks passed for backend${NC}"
