@@ -6,7 +6,7 @@
 COMMIT_MSG_FILE="$1"
 COMMIT_MSG=$(sed -n '1p' "$COMMIT_MSG_FILE")
 
-PATTERN='^(feat|fix|refactor|perf|test|docs|style|chore|infra|security)\\([a-z0-9_-]+\\): .{1,72}$'
+PATTERN='^(feat|fix|refactor|perf|test|docs|style|chore|infra|security)\([a-z0-9_-]+\): .{1,72}$'
 
 # Reject empty message
 if [ -z "$COMMIT_MSG" ]; then
@@ -15,7 +15,8 @@ if [ -z "$COMMIT_MSG" ]; then
 fi
 
 # Validate format
-if ! echo "$COMMIT_MSG" | grep -Eq "$PATTERN"; then
+echo "$COMMIT_MSG" | grep -E "$PATTERN" > /dev/null
+if [ $? -ne 0 ]; then
   echo "❌ Invalid commit message format"
   echo
   echo "Expected:"
