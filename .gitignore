@@ -1,0 +1,124 @@
+########################################
+# OS / System
+########################################
+.DS_Store
+Thumbs.db
+ehthumbs.db
+desktop.ini
+*.swp
+*.swo
+
+########################################
+# IDEs & Editors
+########################################
+# IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+
+# VS Code
+.vscode/
+.history/
+
+# Eclipse / STS
+.classpath
+.project
+.settings/
+.springBeans
+
+########################################
+# Java / Spring Boot
+########################################
+# Build outputs
+target/
+build/
+*.class
+
+# Logs
+logs/
+*.log
+
+# JVM
+hs_err_pid*
+
+########################################
+# Spring Config (DO NOT COMMIT SECRETS)
+########################################
+application-local.yml
+application-local.yaml
+application-dev.yml
+application-dev.yaml
+application-prod.yml
+application-prod.yaml
+application-secrets.yml
+application-secrets.yaml
+
+########################################
+# Node / React
+########################################
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# React build output
+dist/
+
+# Env files
+.env
+.env.*
+!.env.example
+
+########################################
+# Docker
+########################################
+# Runtime containers & volumes
+docker-data/
+docker-volumes/
+*.pid
+
+# Override files (local only)
+docker-compose.override.yml
+docker-compose.local.yml
+
+########################################
+# Nginx
+########################################
+nginx/logs/
+nginx/cache/
+
+########################################
+# MinIO / File Storage
+########################################
+minio-data/
+uploads/
+storage/
+tmp/
+
+########################################
+# Security / Certificates
+########################################
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+*.jks
+*.keystore
+
+########################################
+# Test & Coverage
+########################################
+coverage/
+*.exec
+*.lcov
+
+########################################
+# Misc
+########################################
+.cache/
+.tmp/
+*.tmp
